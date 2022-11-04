@@ -1,0 +1,6 @@
+{
+    // ... other config ...,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true
+    }
+  }
