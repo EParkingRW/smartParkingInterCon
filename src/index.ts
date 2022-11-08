@@ -5,6 +5,7 @@ import fileUploader from 'express-fileupload';
 import routes from './app/restful/routers';
 import DB from './app/database';
 import { associate } from './app/database/relationships';
+import { isAuth } from './app/restful/middlewares/Auth'
 
 dotenv.config();
 
@@ -14,6 +15,7 @@ const app = express();
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cors());
+app.use(isAuth);
 app.use(
   fileUploader({
     fileSize: 50 * 1024 * 1024,
