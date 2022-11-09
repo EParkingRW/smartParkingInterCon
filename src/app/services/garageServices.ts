@@ -11,12 +11,16 @@ export default class GaragesService {
     return Garages.findAll();
   }
 
-  static findByPk(id: number) {
+  static findByPk(id: string) {
     return Garages.findByPk(id);
   }
 
-  static findAllAndCount(condition: any) {
-    return Garages.findAndCountAll({ where: { condition } });
+  static findOne(condition:any) {
+    return Garages.findOne({where:{ ...condition }});
+  }
+
+  static findAllAndCount() {
+    return Garages.findAndCountAll();
   }
 
   static update(set: object, conditon: any) {
