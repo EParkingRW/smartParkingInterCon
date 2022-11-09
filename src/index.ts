@@ -1,4 +1,6 @@
 import express from 'express';
+import path from 'path';
+import * as http from 'http'
 import cors from 'cors';
 import dotenv from 'dotenv';
 import fileUploader from 'express-fileupload';
@@ -6,11 +8,13 @@ import routes from './app/restful/routers';
 import DB from './app/database';
 import { associate } from './app/database/relationships';
 import { isAuth } from './app/restful/middlewares/Auth'
+const {Server} = require('socket.io')
 
 dotenv.config();
-
-const PORT = process.env.PORT || 3000;
+//const __dirname = path.resolve();
 const app = express();
+const server = http.createServer(app)
+export const io = new Server(server, {cors:{origin: "*"}})
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
@@ -23,6 +27,7 @@ app.use(
     tempFileDir: '/tmp/',
   }),
 );
+//app.use(express.static(path.join(__dirname, 'assets')));
 app.use(routes);
 
 const initializeDatabase = async (): Promise<void> => {
@@ -33,10 +38,19 @@ const initializeDatabase = async (): Promise<void> => {
   associate();
 };
 
+
+io.on('connection', socket =>{
+  //console.log("connected to",socket.id)
+  socket.on('disconnect',()=>{
+    console.log("user disconnected:")
+  })
+})
+
+const PORT = process.env.PORT || 3030;
 const start = () => {
   try {
     initializeDatabase();
-    app.listen({ port: PORT }, () =>
+    server.listen({ port: PORT }, () =>
       process.stdout.write(`http://localhost:${PORT} \n`),
     );
   } catch (error) {
