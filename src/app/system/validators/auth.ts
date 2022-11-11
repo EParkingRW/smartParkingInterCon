@@ -8,8 +8,9 @@ export default class AuthValidator {
           userName: Joi.string().required(),
           email: Joi.string().required().email(),
           phoneNumber: Joi.string().required(),
-          gender: Joi.string().required(),
-          dateOfBirth: Joi.date().required(),
+          gender: Joi.string(),
+          dateOfBirth: Joi.date(),
+          companyId : Joi.string().uuid(),
           password: Joi.string().required().min(8),
         });
         const { error } = schema.validate(req.body);
@@ -47,7 +48,8 @@ export default class AuthValidator {
       email: Joi.string().email(),
       phoneNumber: Joi.string(),
       gender: Joi.string(),
-      dateOfBirth: Joi.date().iso(),
+      dateOfBirth: Joi.date(),
+      companyId : Joi.string().uuid(),
       password: Joi.string().min(8),
     });
     const { error } = schema.validate({...req.body,id:req.params.id});

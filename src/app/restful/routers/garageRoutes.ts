@@ -24,6 +24,7 @@ router.put(
 
 router.delete(
   '/:id',
+  protectedRoute, 
   GarageControllers.delete,
 );
 

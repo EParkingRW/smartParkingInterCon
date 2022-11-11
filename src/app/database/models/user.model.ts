@@ -19,6 +19,11 @@ const UserModel = (sequelize: Sequelize) => {
       gender: DataTypes.STRING,
       dateOfBirth:DataTypes.DATE,
       password: DataTypes.STRING,
+      companyId:DataTypes.UUID,
+      role: {
+        type: DataTypes.STRING,
+        defaultValue: 'normal',
+      },
       status: {
         type: DataTypes.INTEGER,
         comment: '0:offline,1:online',

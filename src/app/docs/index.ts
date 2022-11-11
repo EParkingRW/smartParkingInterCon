@@ -3,6 +3,7 @@ import swaggerDoc from './swagger.json';
 import auth from './users/auth';
 import garage from './garage';
 import company from './company/company';
+import Vehicles from './vehicles';
 
 
 const defaults = swaggerDoc.paths;
@@ -17,8 +18,9 @@ const host =
 const paths = {
   ...defaults,
   ...auth,
-  ...garage,
   ...company,
+  ...garage,
+  ...Vehicles,
 };
 
 const config = {

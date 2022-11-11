@@ -1,6 +1,7 @@
 import Response from "../../system/helpers/Response";
 import { fileUploader } from "../../system/fileUploader";
 import GaragesService from "../../services/garageServices";
+import { io } from "../../..";
 
 export default class GarageControllers{
 
@@ -15,6 +16,7 @@ export default class GarageControllers{
             }
             let imageUrl = fileUploader(req.files.image).filepath;
             await GaragesService.create({...req.body,imageUrl}).then((resp)=>{
+                io.sockets.emit("garage",{data:resp?.toJSON()})
                 return Response.success(res,201,{
                     message:"Garage created successfully",
                     data:resp
@@ -26,7 +28,6 @@ export default class GarageControllers{
                 })
             })            
         } catch (error) {
-            console.log(error)
             return Response.error(res,500,{
                 message:"server error",
                 error:error.message
@@ -36,12 +37,13 @@ export default class GarageControllers{
 
     static async getOne(req,res){
         try {
-            let garage = await GaragesService.findByPk(`${req.params.id}`);
+            let garage:any = await GaragesService.findByPk(`${req.params.id}`);
             if (!garage) {
                 return Response.error(res, 404, {
                     message: 'garage not found',
                 });
             }
+            io.sockets.emit("garage",{data:garage?.dataValues})
             return Response.success(res,200,{
                 message:"Garage retreived successfully",
                 data:garage
@@ -62,6 +64,7 @@ export default class GarageControllers{
                         message:"there is not garage in the system",
                     })
                 }
+                io.sockets.emit("garages",{data:resp})
                 return Response.success(res,200,{
                     message:"garages retreived successfully",
                     data:resp

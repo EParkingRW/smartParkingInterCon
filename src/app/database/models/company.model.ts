@@ -12,8 +12,6 @@ const CompanyModel = (sequelize: Sequelize) => {
         defaultValue: DataTypes.UUIDV4 
       },
       name: DataTypes.STRING,
-      garageId: DataTypes.UUID,
-      ownerId: DataTypes.UUID,
     },
     {
       tableName: 'tbl_companies',
