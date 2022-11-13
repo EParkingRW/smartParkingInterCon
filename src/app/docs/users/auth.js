@@ -20,6 +20,28 @@ const users = {
               gender:'Male',
               dateOfBirth:'12/12/2007',
               password: 'admin123!',
+              companyId:'939f62a9-5077-4600-ad51-21a15d8eeed3',
+            },
+          },
+        },
+      ],
+      consumes: ['application/json'],
+      responses,
+    },
+  },
+  '/auth/confirm': {
+    post: {
+      tags: ['Users'],
+      security: [],
+      summary: 'Confirm email',
+      parameters: [
+        {
+          in: 'body',
+          name: 'token',
+          required: true,
+          schema: {
+            example: {
+              token: '',
             },
           },
         },
@@ -42,27 +64,6 @@ const users = {
             example: {
               email: 'emmanuelnkubito2@gmail.com',
               password: 'admin123!',
-            },
-          },
-        },
-      ],
-      consumes: ['application/json'],
-      responses,
-    },
-  },
-  '/auth/confirm': {
-    post: {
-      tags: ['Users'],
-      security: [],
-      summary: 'Confirm email',
-      parameters: [
-        {
-          in: 'body',
-          name: 'token',
-          required: true,
-          schema: {
-            example: {
-              token: '',
             },
           },
         },

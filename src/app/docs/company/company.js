@@ -13,9 +13,7 @@ const company = {
           required: true,
           schema: {
             example: {
-              name: 'Emmaneul NKUBITO',
-              garageId:'',
-              ownerId: '',
+              name: 'Imanzi ltd',
             },
           },
         },
@@ -66,9 +64,7 @@ const company = {
           name: 'company',
           schema: {
             example: {
-              name: 'Emmaneul NKUBITO',
-              garageId:'',
-              ownerId: '',
+              name: 'Imanzi inc',
             },
           },
         },

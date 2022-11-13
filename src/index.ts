@@ -1,5 +1,5 @@
 import express from 'express';
-import path from 'path';
+import morgan from 'morgan';
 import * as http from 'http'
 import cors from 'cors';
 import dotenv from 'dotenv';
@@ -18,6 +18,7 @@ export const io = new Server(server, {cors:{origin: "*"}})
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+app.use(morgan('dev'));
 app.use(cors());
 app.use(isAuth);
 app.use(

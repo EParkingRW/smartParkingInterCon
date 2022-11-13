@@ -3,7 +3,7 @@
 
 # Ignore our build files
 lib
-
+assets
 # Ignore node dependencies
 node_modules
 ######################

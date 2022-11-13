@@ -22,7 +22,10 @@ const GarageModel = (sequelize: Sequelize) => {
       closingTime:DataTypes.TIME,
       description: DataTypes.TEXT,
       slots: DataTypes.INTEGER,
-      takenSlots: DataTypes.INTEGER,
+      takenSlots:{ 
+        type: DataTypes.INTEGER,
+        defaultValue:0
+      }
    
     },
     {
