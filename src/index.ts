@@ -7,7 +7,7 @@ import fileUploader from 'express-fileupload';
 import routes from './app/restful/routers';
 import DB from './app/database';
 import { associate } from './app/database/relationships';
-import { isAuth } from './app/restful/middlewares/Auth'
+import { isAuth } from './app/restful/middlewares/auth'
 const {Server} = require('socket.io')
 
 dotenv.config();

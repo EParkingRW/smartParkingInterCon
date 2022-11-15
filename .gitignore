@@ -3,7 +3,8 @@
 
 # Ignore our build files
 lib
-assets
+/assets
+/postgresdata
 # Ignore node dependencies
 node_modules
 ######################
@@ -97,3 +98,5 @@ tmp
 contents/
 .vscode
 /tmp
+
+.idea/

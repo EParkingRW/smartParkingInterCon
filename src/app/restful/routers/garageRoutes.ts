@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import GarageControllers from '../controllers/garageControllers';
-import { protectedRoute } from '../middlewares/Auth';
+import { protectedRoute } from '../middlewares/auth';
 
 const router = Router();
 
