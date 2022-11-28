@@ -8,8 +8,8 @@ services:
     depends_on:
       - postgres
     environment:
-      DATABASE_URL: postgres://postgres:admin123@postgres:5432/smartParkings
-      NODE_ENV: development
+      DATABASE_URL: postgres://postgres:admin123!@localhost:5432/smartParkingz
+      NODE_ENV: production
       PORT: 4000
     ports:
       - "4000:4000"
@@ -24,8 +24,8 @@ services:
     restart: always
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: admin123
-      POSTGRES_DB: smartParkings
+      POSTGRES_PASSWORD: admin123!
+      POSTGRES_DB: smartParkingz
   pgadmin:
     container_name: pgadmin
     image: dpage/pgadmin4:4.18
