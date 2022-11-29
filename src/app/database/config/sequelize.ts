@@ -18,6 +18,10 @@ const sequelize = new Sequelize(DATABASE_URL, {
   benchmark: true,
 });
 
-sequelize.authenticate();
+sequelize.authenticate().then(()=>{
+  console.log("----------------------database connected successfully---------------------------")
+}).catch((error)=>{
+  console.log("***********************Database fails to connect because of ", error.message)
+})
 
 export default sequelize;

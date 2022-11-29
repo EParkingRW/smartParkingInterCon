@@ -1,20 +1,17 @@
-FROM node:19-alpine3.15
-# Create app directory
+FROM node:19-alpine3.15 as builder
 WORKDIR /usr/src/app
-# Install app dependencies
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-# where available (npm@5+)
 COPY package*.json ./
-
 RUN npm install
-# If you are building your code for production
-# RUN npm ci --only=production
-# Bundle app source
 COPY . .
-# EXPOSE 8080
-
 RUN npm run build
-COPY .env /build/
 
-
+# stage 2
+FROM node:19-alpine3.15
+WORKDIR /usr/src/app
+COPY package*.json ./
+RUN npm install --production
+COPY --from=builder /usr/src/app/build ./build
+COPY ormconfig.docker.json ./ormconfig.json
+COPY .env .
+EXPOSE 4000
 CMD [ "node", "build/" ]

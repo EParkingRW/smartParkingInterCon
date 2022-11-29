@@ -1,0 +1,73 @@
+version: "3.9"
+networks:
+  imanzi:
+    driver: bridge
+services:
+  app:
+    container_name: server
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    # command: bash -c 'while !</dev/tcp/db/35432; do sleep 1; done; npm start'
+    depends_on:
+      - postgres
+    links:
+      - postgres
+    restart: always
+    environment:
+      DATABASE_URL: postgres://app:admin123@postgres/smartParkingz
+      NODE_ENV: production
+      PORT: 4000
+      DATABASE_DB: smartParkingz
+      DATABASE_USER: postgres
+      DATABASE_PASSWORD: admin123
+      DATABASE_HOST: postgres
+      DB_USER: postgres
+      DB_PASSWORD: admin123
+      DB_NAME: smartParkingz
+      DB_HOST: postgres
+      DB_PORT: 35432
+    ports:
+      - "4000:4000"
+    networks:
+      - imanzi
+
+  postgres:
+    container_name: postgres
+    image: postgres
+    ports:
+      - 35432:5432
+    networks:
+      - imanzi
+    volumes: 
+      - ./pgdata:/var/lib/postgresql/data
+      # - ./postgresdata:/var/lib/postgresql/data
+      - ./src/migrations/dbinit.sql:/docker-entrypoint-initdb.d/dbinit.sql
+      # - ./pg_hba.conf:/var/lib/postgresql/data/pg_hba.conf
+      - ./pg_hba.conf:/var/lib/foo/pg_hba.conf
+    restart: always
+    command: postgres -c listen_addresses='*'
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_DB: smartParkingz
+
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4:4.18
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@linuxhint.com
+      PGADMIN_DEFAULT_PASSWORD: secret
+      PGADMIN_LISTEN_PORT: 80
+    ports:
+      - "8080:80"
+    networks:
+      - imanzi
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    depends_on:
+      - postgres
+volumes:
+    db-data:
+    pgadmin-data:
