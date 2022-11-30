@@ -20,7 +20,7 @@ const users = {
               gender:'Male',
               dateOfBirth:'12/12/2007',
               password: 'admin123!',
-              companyId:'939f62a9-5077-4600-ad51-21a15d8eeed3',
+              company:'Imanzi ltd',
             },
           },
         },

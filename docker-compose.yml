@@ -8,15 +8,21 @@ services:
     build: 
       context: .
       dockerfile: Dockerfile
-    # command: bash -c 'while !</dev/tcp/db/35432; do sleep 1; done; npm start'
-    depends_on:
-      - postgres
+    # command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; npm start'
+    # command: ["./wait-for-it/wait-for-it.sh", "db:5432", "--", "npm",  "start"]
     links:
       - postgres
-    restart: always
+    depends_on:
+      - postgres
+    restart: on-failure
+    extra_hosts:
+      - "host.docker.internal:172.17.0.1"
+    # command: sh -c "/wait && /wait.sh"
+    command: sh -c "/wait && /sayhello"
     environment:
-      DATABASE_URL: postgres://app:admin123@postgres/smartParkingz
+      DATABASE_URL: postgres://postgres:admin123@postgres/smartParkingz
       NODE_ENV: production
+      HOST: server
       PORT: 4000
       DATABASE_DB: smartParkingz
       DATABASE_USER: postgres
@@ -26,9 +32,16 @@ services:
       DB_PASSWORD: admin123
       DB_NAME: smartParkingz
       DB_HOST: postgres
-      DB_PORT: 35432
+      DB_PORT: 5432
+      WAIT_HOSTS: postgres:5432
+      WAIT_HOSTS_TIMEOUT: 300
+      WAIT_SLEEP_INTERVAL: 30
+      WAIT_HOST_CONNECT_TIMEOUT: 30
     ports:
       - "4000:4000"
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
     networks:
       - imanzi
 
@@ -36,21 +49,22 @@ services:
     container_name: postgres
     image: postgres
     ports:
-      - 35432:5432
+      - 5432:5432
     networks:
       - imanzi
     volumes: 
       - ./pgdata:/var/lib/postgresql/data
       # - ./postgresdata:/var/lib/postgresql/data
-      - ./src/migrations/dbinit.sql:/docker-entrypoint-initdb.d/dbinit.sql
+      # - ./pgdata/src/migrations/dbinit.sql:/docker-entrypoint-initdb.d/dbinit.sql
       # - ./pg_hba.conf:/var/lib/postgresql/data/pg_hba.conf
-      - ./pg_hba.conf:/var/lib/foo/pg_hba.conf
+      # - ./pg_hba.conf:/var/lib/foo/pg_hba.conf
     restart: always
     command: postgres -c listen_addresses='*'
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: admin123
       POSTGRES_DB: smartParkingz
+      POSTGRES_HOST_AUTH_METHOD: trust
 
   pgadmin:
     container_name: pgadmin
@@ -66,8 +80,11 @@ services:
       - imanzi
     volumes:
       - pgadmin-data:/var/lib/pgadmin
+      # - ./data:/var/lib/postgresql/data
     depends_on:
       - postgres
 volumes:
-    db-data:
+    postgres-data:
     pgadmin-data:
+    app-data:
+    pgdata: 

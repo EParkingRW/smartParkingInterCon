@@ -10,7 +10,7 @@ export default class AuthValidator {
           phoneNumber: Joi.string().required(),
           gender: Joi.string(),
           dateOfBirth: Joi.date(),
-          companyId : Joi.string().uuid(),
+          company : Joi.string(),
           password: Joi.string().required().min(8),
         });
         const { error } = schema.validate(req.body);
