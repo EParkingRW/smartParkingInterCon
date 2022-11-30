@@ -16,7 +16,7 @@ const GarageModel = (sequelize: Sequelize) => {
       latitude: DataTypes.DOUBLE,
       longitude: DataTypes.DOUBLE,
       imageUrl: DataTypes.STRING,
-      companyId: DataTypes.UUID,
+      userId: DataTypes.UUID,
       hourlyFee:DataTypes.DOUBLE,
       openingTime:DataTypes.TIME,
       closingTime:DataTypes.TIME,

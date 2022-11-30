@@ -40,11 +40,6 @@ const garage = {
             },
             {
               in: 'formData',
-              name: 'companyId',
-              required: true,
-            },
-            {
-              in: 'formData',
               name: 'hourlyFee',
               required: true,
             },

@@ -28,8 +28,8 @@ module.exports = {
         password: {
           type: Sequelize.STRING,
         },
-        companyId: {
-            type: Sequelize.UUID,
+        company: {
+            type: Sequelize.STRING,
         },
         role: {
             type: Sequelize.STRING,

@@ -19,7 +19,7 @@ const UserModel = (sequelize: Sequelize) => {
       gender: DataTypes.STRING,
       dateOfBirth:DataTypes.DATE,
       password: DataTypes.STRING,
-      companyId:DataTypes.UUID,
+      company:DataTypes.STRING,
       role: {
         type: DataTypes.STRING,
         defaultValue: 'normal',

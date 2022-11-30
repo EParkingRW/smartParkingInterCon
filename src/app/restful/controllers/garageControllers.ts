@@ -7,7 +7,8 @@ export default class GarageControllers{
 
     static async create(req,res){
         try {
-            const { name } = req.body
+            const { name } = req.body;
+            const { userId } = req;
             let garage = await GaragesService.findOne({name});
             if (garage) {
                 return Response.error(res, 400, {
@@ -15,7 +16,7 @@ export default class GarageControllers{
                 });
             }
             let imageUrl = fileUploader(req.files.image).filepath;
-            await GaragesService.create({...req.body,imageUrl}).then((resp)=>{
+            await GaragesService.create({...req.body,userId,imageUrl}).then((resp)=>{
                 io.sockets.emit("garage",{data:resp?.toJSON()})
                 return Response.success(res,201,{
                     message:"Garage created successfully",
