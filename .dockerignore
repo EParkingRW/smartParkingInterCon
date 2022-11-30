@@ -1,2 +1,9 @@
 node_modules
 npm-debug.log
+pgdata
+.idea/
+.vscode/
+build/
+temp/
+dist
+pg_hba.conf

@@ -6,8 +6,8 @@
   "license": "MIT",
   "scripts": {
     "dev": "nodemon src/index.ts",
-    "start": "nodemon",
-    "build": "tsc -p .",
+    "start": "node build/",
+    "build": "rm -rf build && tsc -p .",
     "clean": "rimraf lib",
     "prebuild": "yarn clean",
     "db:migrate": "sequelize db:migrate",
@@ -16,7 +16,8 @@
     "db:undo": "sequelize db:migrate:undo:all",
     "db:reset": "npm run db:drop && npm run db:create && npm run db:migrate && npm run db:seed",
     "db:create": "sequelize db:create",
-    "db:drop": "sequelize db:drop"
+    "db:drop": "sequelize db:drop",
+    "docker": "docker-compose up -d && docker-compose up --build"
   },
   "dependencies": {
     "@babel/plugin-proposal-decorators": "^7.19.1",

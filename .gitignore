@@ -1,6 +1,7 @@
 # Log files
 *.log
-
+pgdata
+pg_hba.conf
 # Ignore our build files
 lib
 /assets
