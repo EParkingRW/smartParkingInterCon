@@ -1,71 +1,134 @@
-version: "3.9"
+# version: "3.9"
+# networks:
+#   imanzi:
+#     driver: bridge
+# services:
+#   app:
+#     container_name: server
+#     build: 
+#       context: .
+#       dockerfile: Dockerfile
+#     # command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; npm start'
+#     # command: ["./wait-for-it/wait-for-it.sh", "db:5432", "--", "npm",  "start"]
+#     links:
+#       - postgres
+#     depends_on:
+#       - postgres
+#     restart: on-failure
+#     extra_hosts:
+#       - "host.docker.internal:172.17.0.1"
+#     # command: sh -c "/wait && /wait.sh"
+#     # command: sh -c "/wait && /sayhello"
+#     # environment:
+#     #   DATABASE_URL: postgres://postgres@postgres/smartParkingz
+#     #   # NODE_ENV: production
+#     #   # HOST: server
+#     #   PORT: 4000
+#     #   # DATABASE_DB: smartParkingz
+#     #   # DATABASE_USER: postgres
+#     #   # DATABASE_PASSWORD: admin123
+#     #   # DATABASE_HOST: postgres
+#     #   # DB_USER: postgres
+#     #   # DB_PASSWORD: admin123
+#     #   # DB_NAME: smartParkingz
+#     #   # DB_HOST: postgres
+#     #   # DB_PORT: 5432
+#     #   WAIT_HOSTS: postgres:5432
+#     #   WAIT_HOSTS_TIMEOUT: 300
+#     #   # WAIT_SLEEP_INTERVAL: 30
+#     #   # WAIT_HOST_CONNECT_TIMEOUT: 30
+#     ports:
+#       - "4001:4001"
+#     volumes:
+#       - .:/usr/src/app
+#       - /usr/src/app/node_modules
+#     networks:
+#       - imanzi
+
+#   postgres:
+#     container_name: postgres
+#     image: postgres
+#     ports:
+#       - 5432:5432
+# networks:
+#   imanzi:
+#     driver: bridge
+#     volumes: 
+#       - ./pgdata:/var/lib/postgresql/data
+#       # - ./postgresdata:/var/lib/postgresql/data
+#       # - ./pgdata/src/migrations/dbinit.sql:/docker-entrypoint-initdb.d/dbinit.sql
+#       # - ./pg_hba.conf:/var/lib/postgresql/data/pg_hba.conf
+#       # - ./pg_hba.conf:/var/lib/foo/pg_hba.conf
+#     restart: always
+#     command: postgres -c listen_addresses='*'
+#     environment:
+#       POSTGRES_USER: postgres
+#       POSTGRES_PASSWORD: admin123
+#       POSTGRES_DB: smartParkingz
+#       POSTGRES_HOST_AUTH_METHOD: trust
+
+#   pgadmin:
+#     container_name: pgadmin
+#     image: dpage/pgadmin4:4.18
+#     restart: always
+#     environment:
+#       PGADMIN_DEFAULT_EMAIL: admin@linuxhint.com
+#       PGADMIN_DEFAULT_PASSWORD: secret
+#       PGADMIN_LISTEN_PORT: 80
+#     ports:
+#       - "8080:80"
+#     networks:
+#       - imanzi
+#     volumes:
+#       - pgadmin-data:/var/lib/pgadmin
+#       # - ./data:/var/lib/postgresql/data
+#     depends_on:
+#       - postgres
+# volumes:
+#     postgres-data:
+#     pgadmin-data:
+#     app-data:
+#     pgdata: 
+
+version: '3.8'
 networks:
   imanzi:
     driver: bridge
 services:
-  app:
-    container_name: server
-    build: 
-      context: .
-      dockerfile: Dockerfile
-    # command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; npm start'
-    # command: ["./wait-for-it/wait-for-it.sh", "db:5432", "--", "npm",  "start"]
-    links:
-      - postgres
-    depends_on:
-      - postgres
-    restart: on-failure
-    extra_hosts:
-      - "host.docker.internal:172.17.0.1"
-    # command: sh -c "/wait && /wait.sh"
-    command: sh -c "/wait && /sayhello"
-    environment:
-      DATABASE_URL: postgres://postgres:admin123@postgres/smartParkingz
-      NODE_ENV: production
-      HOST: server
-      PORT: 4000
-      DATABASE_DB: smartParkingz
-      DATABASE_USER: postgres
-      DATABASE_PASSWORD: admin123
-      DATABASE_HOST: postgres
-      DB_USER: postgres
-      DB_PASSWORD: admin123
-      DB_NAME: smartParkingz
-      DB_HOST: postgres
-      DB_PORT: 5432
-      WAIT_HOSTS: postgres:5432
-      WAIT_HOSTS_TIMEOUT: 300
-      WAIT_SLEEP_INTERVAL: 30
-      WAIT_HOST_CONNECT_TIMEOUT: 30
-    ports:
-      - "4000:4000"
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
-    networks:
-      - imanzi
-
-  postgres:
-    container_name: postgres
+  db:
     image: postgres
     ports:
-      - 5432:5432
+      - 0.0.0.0:5431:5432/tcp
+    environment:
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: admin123
+        POSTGRES_DB: smartParkingz
+        POSTGRES_HOST_AUTH_METHOD: trust
+        PGUSER: postgres
+    # command: bash -c 'psql -U postgres,CREATE USER postgres WITH PASSWORD 'admin123';ALTER USER postgres CREATEDB; done; npm start'
+
+    volumes:
+      - db-data:/var/lib/postgresql/data
     networks:
       - imanzi
-    volumes: 
-      - ./pgdata:/var/lib/postgresql/data
-      # - ./postgresdata:/var/lib/postgresql/data
-      # - ./pgdata/src/migrations/dbinit.sql:/docker-entrypoint-initdb.d/dbinit.sql
-      # - ./pg_hba.conf:/var/lib/postgresql/data/pg_hba.conf
-      # - ./pg_hba.conf:/var/lib/foo/pg_hba.conf
     restart: always
-    command: postgres -c listen_addresses='*'
+  app:
+    build: .
+    depends_on:
+      - db
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: admin123
-      POSTGRES_DB: smartParkingz
-      POSTGRES_HOST_AUTH_METHOD: trust
-
+      - DB_HOST=db
+      - DB_PORT=5431
+      - DB_USER=postgres
+      - DB_PASSWORD=admin123
+      - DB_NAME=smartParkingz
+      - DATABASE_URL=postgres://postgres:admin123@db/smartParkingz
+      - PGUSER=postgres
+    ports:
+      - 8000:8000
+    networks:
+      - imanzi
+    restart: always
   pgadmin:
     container_name: pgadmin
     image: dpage/pgadmin4:4.18
@@ -82,9 +145,7 @@ services:
       - pgadmin-data:/var/lib/pgadmin
       # - ./data:/var/lib/postgresql/data
     depends_on:
-      - postgres
+      - db
 volumes:
-    postgres-data:
-    pgadmin-data:
-    app-data:
-    pgdata: 
+  db-data:
+  pgadmin-data:
