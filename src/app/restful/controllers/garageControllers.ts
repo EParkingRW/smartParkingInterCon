@@ -16,8 +16,10 @@ export default class GarageControllers{
                 });
             }
             let imageUrl = fileUploader(req.files.image).filepath;
-            await GaragesService.create({...req.body,userId,imageUrl}).then((resp)=>{
-                io.sockets.emit("garage",{data:resp?.toJSON()})
+            await GaragesService.create({...req.body,userId,imageUrl}).then(async(resp)=>{
+                io.sockets.emit("garage",{data:resp?.toJSON()});
+                const garages = await GaragesService.findAllAndCount()
+                io.sockets.emit("garages",{data:garages})
                 return Response.success(res,201,{
                     message:"Garage created successfully",
                     data:resp
