@@ -13,7 +13,7 @@ node_modules
 # Project Specific
 ######################
 .env
-yarn.lock
+# yarn.lock
 /build
 /assets
 calendar.js
