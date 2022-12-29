@@ -27,10 +27,15 @@ const sendEmail = (mailOptions: {
     subject: mailOptions.subject,
     html: mailOptions.message,
   };
-  return transporter.sendMail(Options, error => {
+  return transporter.sendMail(Options, (error, info) => {
     if (error) {
       console.log(error.message);
+      return false;
+    }else{
+      console.log(info.info.response)
+      return true;
     }
+
   });
 };
 

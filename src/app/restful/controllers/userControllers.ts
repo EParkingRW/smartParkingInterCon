@@ -38,7 +38,12 @@ export default class AuthControllers {
               }),
               subject: 'Account Verification Link',
             };
-            sendEmail(emailOptions)
+            const emailSent:Boolean = await sendEmail(emailOptions);
+            if(emailSent === false){
+              return Response.error(res,402,{
+                message:"Sorry we fail to send verification email on you, try again later"
+              })
+            }
             return Response.success(res, 201, {
                 message: `Dear ${createdUser.fullName}, verify your email`,
                 user: userData,
@@ -197,7 +202,12 @@ export default class AuthControllers {
         }),
         subject: 'Reset Password Link',
       };
-      sendEmail(emailOptions);
+      const emailSent = await sendEmail(emailOptions);
+      if(emailSent === false){
+        return Response.error(res,402,{
+          message:"Sorry we fail to send email on you, please try again later"
+        })
+      }
       return Response.success(res, 201, {
         message: 'check your email',
       });
