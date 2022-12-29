@@ -4,7 +4,8 @@ pgdata
 pg_hba.conf
 # Ignore our build files
 lib
-/assets
+/assetsf
+
 /postgresdata
 # Ignore node dependencies
 node_modules
@@ -12,7 +13,9 @@ node_modules
 # Project Specific
 ######################
 .env
+yarn.lock
 /build
+/assets
 calendar.js
 ######################
 # Node
