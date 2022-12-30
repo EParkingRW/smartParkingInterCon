@@ -9,17 +9,26 @@ const sendEmail = (mailOptions: {
   message: string;
 }) => {
   var transporter = nodemailer.createTransport({
-    host: process.env.TRANSPORTER_SERVICE, // hostname
-    service: 'outlook',
-    secureConnection: false, // TLS requires secureConnection to be false
-    port: 587, // port for secure SMTP
-    tls: {
-      rejectUnauthorized: false
-    },
+    // host: process.env.TRANSPORTER_SERVICE, // hostname
+    // service: 'outlook',
+    // secureConnection: false, // TLS requires secureConnection to be false
+    // port: 587, // port for secure SMTP
+    // tls: {
+    //   rejectUnauthorized: false
+    // },
+    // auth: {
+    //   user: process.env.SERVICE_USERNAME,
+    //   pass: process.env.SERVICE_PASSWORD,
+    // }
+    host: process.env.TRANSPORTER_SERVICE,
+    port: process.env.SERVICE_PORT || 465,
     auth: {
       user: process.env.SERVICE_USERNAME,
       pass: process.env.SERVICE_PASSWORD,
-    }
+    },
+    secure: true,
+    logger: process.env.NODE_ENV === "development" ? true : false,
+    debug: true,
 });
   const Options = {
     from: `Smart Parking App <${process.env.SERVICE_USERNAME}>`,

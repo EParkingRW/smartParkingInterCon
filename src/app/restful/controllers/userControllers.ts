@@ -202,7 +202,7 @@ export default class AuthControllers {
         }),
         subject: 'Reset Password Link',
       };
-      const emailSent = await sendEmail(emailOptions);
+      const emailSent:Boolean = await sendEmail(emailOptions);
       if(emailSent === false){
         return Response.error(res,402,{
           message:"Sorry we fail to send email on you, please try again later"

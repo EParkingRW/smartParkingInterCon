@@ -95,57 +95,67 @@ networks:
   imanzi:
     driver: bridge
 services:
-  db:
-    image: postgres
-    ports:
-      - 0.0.0.0:5431:5432/tcp
-    environment:
-        POSTGRES_USER: postgres
-        POSTGRES_PASSWORD: admin123
-        POSTGRES_DB: smartParkingz
-        POSTGRES_HOST_AUTH_METHOD: trust
-        PGUSER: postgres
-    # command: bash -c 'psql -U postgres,CREATE USER postgres WITH PASSWORD 'admin123';ALTER USER postgres CREATEDB; done; npm start'
+  # db:
+  #   image: postgres
+  #   ports:
+  #     - 0.0.0.0:5431:5432/tcp
+  #   environment:
+  #       POSTGRES_USER: postgres
+  #       POSTGRES_PASSWORD: admin123
+  #       POSTGRES_DB: smartParkingz
+  #       POSTGRES_HOST_AUTH_METHOD: trust
+  #       PGUSER: postgres
+  #   # command: bash -c 'psql -U postgres,CREATE USER postgres WITH PASSWORD 'admin123';ALTER USER postgres CREATEDB; done; npm start'
 
-    volumes:
-      - db-data:/var/lib/postgresql/data
-    networks:
-      - imanzi
-    restart: always
+  #   volumes:
+  #     - db-data:/var/lib/postgresql/data
+  #   networks:
+  #     - imanzi
+  #   restart: always
   app:
     build: .
-    depends_on:
-      - db
+    # depends_on:
+    #   - db
     environment:
-      - DB_HOST=db
-      - DB_PORT=5431
-      - DB_USER=postgres
-      - DB_PASSWORD=admin123
-      - DB_NAME=smartParkingz
-      - DATABASE_URL=postgres://postgres:admin123@db/smartParkingz
-      - PGUSER=postgres
+      - HOST=${HOST}
+      - PORT=${PORT}
+      - NODE_ENV=production
+      - API_VERSION=v1
+      - WEB_APP_URL=${WEB_APP_URL}
+      - JWT_SECRET=${JWT_SECRET}
+      - EXPIRES_IN=${EXPIRES_IN}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DATABASE_URL=${DATABASE_URL}
+      - SERVICE_USERNAME=${SERVICE_USERNAME}
+      - SERVICE_PASSWORD=${SERVICE_PASSWORD}
+      - TRANSPORTER_SERVICE=${TRANSPORTER_SERVICE}
+      - ALLOWED_EMAILS=${ALLOWED_EMAILS}
     ports:
-      - 8000:8000
+      - ${PORT}:${PORT}
     networks:
       - imanzi
     restart: always
-  pgadmin:
-    container_name: pgadmin
-    image: dpage/pgadmin4:4.18
-    restart: always
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@linuxhint.com
-      PGADMIN_DEFAULT_PASSWORD: secret
-      PGADMIN_LISTEN_PORT: 80
-    ports:
-      - "8080:80"
-    networks:
-      - imanzi
-    volumes:
-      - pgadmin-data:/var/lib/pgadmin
-      # - ./data:/var/lib/postgresql/data
-    depends_on:
-      - db
+  # pgadmin:
+  #   container_name: pgadmin
+  #   image: dpage/pgadmin4:4.18
+  #   restart: always
+  #   environment:
+  #     PGADMIN_DEFAULT_EMAIL: admin@linuxhint.com
+  #     PGADMIN_DEFAULT_PASSWORD: secret
+  #     PGADMIN_LISTEN_PORT: 80
+  #   ports:
+  #     - "8080:80"
+  #   networks:
+  #     - imanzi
+  #   volumes:
+  #     - pgadmin-data:/var/lib/pgadmin
+  #     # - ./data:/var/lib/postgresql/data
+  #   depends_on:
+  #     - db
 volumes:
   db-data:
   pgadmin-data:
