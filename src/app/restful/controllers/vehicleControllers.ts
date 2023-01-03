@@ -1,8 +1,8 @@
 import DB from "../../database";
 import Response from "../../system/helpers/Response";
-import { fileUploader } from "../../system/fileUploader";
 import GaragesService from "../../services/garageServices";
 import { io } from "../../..";
+import cloudinari from "../../system/fileUploader/cloudinary";
 
 const {Vehicles} = DB
 export default class vehicleControllers{
@@ -57,7 +57,14 @@ export default class vehicleControllers{
                 }
             }
             else{
-                imageUrl = fileUploader(req.files.photo).filepath
+                try {
+                    imageUrl = await cloudinari.uploadPhoto(req, res, req.files.photo);
+                  } catch (error) {
+                    return res.status(400).json({
+                      message: 'image fail to be saved',
+                      error,
+                    });
+                  }
                 Vehicles.create({plateText,garageId,imageUrl}).then(async(resp)=>{
                     garage.set('takenSlots',garage?.takenSlots+1); 
                     garage = await garage.save();

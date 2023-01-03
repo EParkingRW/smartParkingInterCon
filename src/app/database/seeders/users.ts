@@ -20,6 +20,22 @@ module.exports = {
             created_at:new Date(),
             updated_at: new Date(),
         },
+        {
+          id:'13203aaa-47c3-4db2-b88f-e5cd3137310b',
+          full_name: "NDATUMUREMYI Paterne",
+          user_name: "Nught",
+          email: "ndatumuremyip@gmail.com",
+          phone_number: "+2507888888",
+          gender: "Male",
+          date_of_birth: "12/12/2012",
+          password: "$2a$12$wFgG2fy/n04SvMwvJfKzv.PTdvp.AWkmVZPrkPEn9z98L17w1ssda",
+          company: "URUTARE inc",
+          role:"admin",
+          status: 1,
+          active: true,
+          created_at:new Date(),
+          updated_at: new Date(),
+      },
     
     ]
     , {}),

@@ -1,51 +1,42 @@
 import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
+// import Response from './../helpers/Response';
+// import { ServerResponse } from 'http';
 
 dotenv.config();
+
+const port = Number(process.env.TRANSPORTER_PORT) || 465;
 
 const sendEmail = (mailOptions: {
   email: string;
   subject: string;
   message: string;
 }) => {
-  var transporter = nodemailer.createTransport({
-    // host: process.env.TRANSPORTER_SERVICE, // hostname
-    // service: 'outlook',
-    // secureConnection: false, // TLS requires secureConnection to be false
-    // port: 587, // port for secure SMTP
-    // tls: {
-    //   rejectUnauthorized: false
-    // },
-    // auth: {
-    //   user: process.env.SERVICE_USERNAME,
-    //   pass: process.env.SERVICE_PASSWORD,
-    // }
+  const transporter = nodemailer.createTransport({
     host: process.env.TRANSPORTER_SERVICE,
-    port: process.env.SERVICE_PORT || 465,
+    port: port,
     auth: {
       user: process.env.SERVICE_USERNAME,
       pass: process.env.SERVICE_PASSWORD,
     },
-    secure: true,
-    logger: process.env.NODE_ENV === "development" ? true : false,
+    secure: port === 465,
+    logger: true,
     debug: true,
-});
+  });
   const Options = {
     from: `Smart Parking App <${process.env.SERVICE_USERNAME}>`,
     to: mailOptions.email,
     subject: mailOptions.subject,
     html: mailOptions.message,
   };
-  return transporter.sendMail(Options, (error, info) => {
-    if (error) {
-      console.log(error.message);
-      return false;
-    }else{
-      console.log(info.info.response)
-      return true;
-    }
-
-  });
+  return new Promise((resolve,reject)=>{
+    transporter.sendMail(Options, (error, info)=>{
+      if(info){
+        return resolve(true);
+      }
+      return reject(error.message)
+    })
+  })
 };
 
 export default sendEmail;
