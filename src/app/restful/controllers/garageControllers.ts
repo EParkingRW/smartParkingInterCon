@@ -1,40 +1,53 @@
 import Response from "../../system/helpers/Response";
-import { fileUploader } from "../../system/fileUploader";
+import cloudinari from "../../system/fileUploader/cloudinary";
 import GaragesService from "../../services/garageServices";
 import { io } from "../../..";
 
 export default class GarageControllers{
 
-    static async create(req,res){
+    static async create(req, res) {
         try {
-            const { name } = req.body;
-            const { userId } = req;
-            let garage = await GaragesService.findOne({name});
-            if (garage) {
-                return Response.error(res, 400, {
-                    message: 'garage is already exist',
-                });
-            }
-            let imageUrl = fileUploader(req.files.image).filepath;
-            await GaragesService.create({...req.body,userId,imageUrl}).then(async(resp)=>{
-                io.sockets.emit("garage",{data:resp?.toJSON()});
-                const garages = await GaragesService.findAllAndCount()
-                io.sockets.emit("garages",{data:garages})
-                return Response.success(res,201,{
-                    message:"Garage created successfully",
-                    data:resp
-                })
-            }).catch((error)=>{
-                return Response.error(res,401,{
-                    message:"garage fail to be saved",
-                    error:error.message
-                })
-            })            
+          const { name } = req.body;
+          const { userId } = req;
+          const { image } = req.files;
+          let imageUrl;
+      
+          let garage = await GaragesService.findOne({ name });
+          if (garage) {
+            return res.status(400).json({
+              message: 'garage is already exist',
+            });
+          }
+      
+          try {
+            imageUrl = await cloudinari.uploadPhoto(req, res, image);
+          } catch (error) {
+            return res.status(400).json({
+              message: 'image fail to be saved',
+              error,
+            });
+          }
+      
+          try {
+            const resp = await GaragesService.create({ ...req.body, userId, imageUrl });
+            io.sockets.emit('garage', { data: resp.toJSON() });
+            const garages = await GaragesService.findAllAndCount();
+            io.sockets.emit('garages', { data: garages });
+            return res.status(201).json({
+              message: 'Garage created successfully',
+              data: resp,
+            });
+          } catch (error) {
+            return res.status(401).json({
+              message: 'garage fail to be saved',
+              error: error.message,
+            });
+          }
         } catch (error) {
-            return Response.error(res,500,{
-                message:"server error",
-                error:error.message
-            })   
+          return res.status(500).json({
+            message: 'server error',
+            error: error.message,
+          });
         }
     }
 
@@ -94,7 +107,14 @@ export default class GarageControllers{
                     message: 'garage not found',
                 });
             }
-            let imageUrl = req.files? fileUploader(req.file.image).filepath :garage?.imageUrl;
+            const imageUrl = req.files
+            ? await cloudinari.uploadPhoto(req, res, req.files.image).catch((error) =>
+                Response.error(res,400,{
+                    message: 'image fail to be saved',
+                    error, 
+                })
+              )
+            : garage?.imageUrl;
             await GaragesService.update({...req.body,imageUrl},{
               id:req.paarams.id
             }).then((resp)=>{
