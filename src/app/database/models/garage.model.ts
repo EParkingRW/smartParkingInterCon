@@ -6,7 +6,6 @@ const GarageModel = (sequelize: Sequelize) => {
   Garage.init(
     {
       id: {
-        // autoIncrement: true,
         primaryKey: true,
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4 

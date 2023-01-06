@@ -7,7 +7,7 @@ const sequelize = new Sequelize(DATABASE_URL, {
   define: {
     charset: 'utf8mb4',
     collate: 'utf8mb4_general_ci',
-    underscored: true,
+    underscored: false,
     freezeTableName: true,
   },
   pool: {
