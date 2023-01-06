@@ -1,14 +1,16 @@
 import DB from "../../database";
 import Response from "../../system/helpers/Response";
+import convertToSlug from "../../system/helpers/convertToSlug";
 
 const { Companies } = DB;
 export default class CompanyControllers{
 
     static async create(req,res){
         try {
+            const slug = convertToSlug(req.body.name);
             let company = await Companies.findOne({
                 where:{
-                    name:req.body.name
+                    slug
                 }
             });
             if (company) {
@@ -16,7 +18,7 @@ export default class CompanyControllers{
                     message: 'Company is already exist',
                 });
             }
-            await Companies.create({...req.body}).then((resp)=>{
+            await Companies.create({...req.body,slug}).then((resp)=>{
                 return Response.success(res,201,{
                     message:"company created successfully",
                     data:resp
@@ -41,6 +43,7 @@ export default class CompanyControllers{
                 if(!resp?.count){
                     return Response.error(res,203,{
                         message:"there is not company in the system",
+                        data:resp
                     })
                 }
                 return Response.success(res,200,{
@@ -85,26 +88,19 @@ export default class CompanyControllers{
 
     static async update(req,res){
         try {
-            let company = await Companies.findByPk(`${req.params.id}`);
+            let company:any = await Companies.findByPk(`${req.params.id}`);
             if (!company) {
                 return Response.error(res, 404, {
                     message: 'Company not found',
                 });
             }
-            await Companies.update({...req.body},{
-                where:{id:req.paarams.id}
-            }).then((resp)=>{
-                return Response.success(res,200,{
-                    message:"company updated successfully",
-                    data:resp[0]
-                })
-            }).catch((error)=>{
-                return Response.error(res,401,{
-                    message:"there is problem in updating companies",
-                    error:error.message
-                })
+            company.slug = req.body.name ? convertToSlug(req.body.name) : company.slug;
+            company.set(req.body);
+            company.save();
+            return Response.success(res,200,{
+                message:"company updated successfully",
+                data:company
             })
-            
         } catch (error) {
             return Response.error(res,500,{
                 message:"server error",

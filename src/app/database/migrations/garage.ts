@@ -1,48 +1,51 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('tbl_users', {
+    await queryInterface.createTable('tbl_garages', {
       id: {
         allowNull: false,
         primaryKey: true,
         type: Sequelize.UUID,
         default: Sequelize.UUIDV4 
-      },
-      fullName: {
+       },
+      name: {
         type: Sequelize.STRING,
       },
-      userName: {
+      slug: {
         type: Sequelize.STRING,
       },
-      email: {
+      address: {
         type: Sequelize.STRING,
       },
-      phoneNumber: {
+      latitude: {
+        type: Sequelize.DOUBLE,
+      },
+      longitude: {
+        type: Sequelize.DOUBLE,
+      },
+      imageUrl: {
         type: Sequelize.STRING,
       },
-      gender: {
-          type: Sequelize.STRING,
+      userId: {
+        type: Sequelize.UUID,
       },
-      dateOfBirth: {
-          type: Sequelize.DATE,
+      hourlyFee: {
+        type: Sequelize.DOUBLE,
       },
-      password: {
-        type: Sequelize.STRING,
+      openingTime: {
+        type: Sequelize.TIME,
       },
-      company: {
-          type: Sequelize.STRING,
+      closingTime: {
+        type: Sequelize.TIME,
       },
-      role: {
-          type: Sequelize.STRING,
-          default: 'normal',
+      description: {
+        type: Sequelize.TEXT,
       },
-      status: {
+      slots: {
         type: Sequelize.INTEGER,
-        comment: '0:offline,1:online',
-        default: 0,
       },
-      active: {
-        type: Sequelize.BOOLEAN,
-        default: false,
+      takenSlots: {
+        type: Sequelize.INTEGER,
+        default:0
       },
       createdAt: {
         allowNull: false,
@@ -57,6 +60,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('tbl_users');
+    await queryInterface.dropTable('tbl_garages');
   },
 };

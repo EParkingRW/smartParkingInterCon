@@ -1,7 +1,9 @@
 import Response from "../../system/helpers/Response";
 import cloudinari from "../../system/fileUploader/cloudinary";
 import GaragesService from "../../services/garageServices";
+import convertToSlug from "../../system/helpers/convertToSlug";
 import { io } from "../../..";
+
 
 export default class GarageControllers{
 
@@ -10,9 +12,10 @@ export default class GarageControllers{
           const { name } = req.body;
           const { userId } = req;
           const { image } = req.files;
-          let imageUrl;
+          const slug = convertToSlug(name);
+          let imageUrl: any;
       
-          let garage = await GaragesService.findOne({ name });
+          let garage = await GaragesService.findOne({ slug });
           if (garage) {
             return res.status(400).json({
               message: 'garage is already exist',
@@ -29,7 +32,7 @@ export default class GarageControllers{
           }
       
           try {
-            const resp = await GaragesService.create({ ...req.body, userId, imageUrl });
+            const resp = await GaragesService.create({ ...req.body, userId, imageUrl,slug });
             io.sockets.emit('garage', { data: resp.toJSON() });
             const garages = await GaragesService.findAllAndCount();
             io.sockets.emit('garages', { data: garages });
@@ -101,8 +104,9 @@ export default class GarageControllers{
 
     static async update(req,res){
         try {
-            let garage:any = await GaragesService.findByPk(`${req.params.id}`);
-            if (!garage) {
+            const { id } = req.params;
+            let garageExist:any = await GaragesService.findByPk(`${id}`);
+            if (!garageExist) {
                 return Response.error(res, 404, {
                     message: 'garage not found',
                 });
@@ -114,19 +118,15 @@ export default class GarageControllers{
                     error, 
                 })
               )
-            : garage?.imageUrl;
-            await GaragesService.update({...req.body,imageUrl},{
-              id:req.paarams.id
-            }).then((resp)=>{
-                return Response.success(res,200,{
-                    message:"garage updated successfully",
-                    data:resp[0]
-                })
-            }).catch((error)=>{
-                return Response.error(res,401,{
-                    message:"there is problem in updating garage",
-                    error:error.message
-                })
+            : garageExist?.imageUrl;
+            const slug = req.body.name ? convertToSlug(req.body.name): garageExist.slug;
+            garageExist.imageUrl = imageUrl;
+            garageExist.slug=slug;
+            garageExist.set(req.body);
+            garageExist.save();
+            return Response.success(res,200,{
+                message:"garage updated successfully",
+                data:garageExist
             })
             
         } catch (error) {

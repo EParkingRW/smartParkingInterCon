@@ -12,6 +12,7 @@ const CompanyModel = (sequelize: Sequelize) => {
         defaultValue: DataTypes.UUIDV4 
       },
       name: DataTypes.STRING,
+      slug: DataTypes.STRING,
     },
     {
       tableName: 'tbl_companies',

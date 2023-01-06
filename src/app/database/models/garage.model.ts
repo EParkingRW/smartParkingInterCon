@@ -6,12 +6,12 @@ const GarageModel = (sequelize: Sequelize) => {
   Garage.init(
     {
       id: {
-        // autoIncrement: true,
         primaryKey: true,
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4 
       },
       name: DataTypes.STRING,
+      slug: DataTypes.STRING,
       address: DataTypes.STRING,
       latitude: DataTypes.DOUBLE,
       longitude: DataTypes.DOUBLE,

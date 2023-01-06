@@ -75,11 +75,7 @@ const users = {
   '/auth/profile': {
     get: {
       tags: ['Users'],
-      security: [
-        {
-          JWT: [],
-        },
-      ],
+      security: [{JWT: [],},],
       summary: 'Get my profile',
       parameters: [],
       consumes: ['application/json'],
