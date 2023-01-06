@@ -40,9 +40,10 @@ export default class vehicleControllers{
 
                     //socket
                     // io.sockets.emit("vehicle",{data:vehicle.dataValues})
+                    io.sockets.emit("garage",{data:garage.dataValues})
                     SocketRooms.room(`${garageId}`);
                     io.to(`${garageId}`).emit("garageRoom",{data:garage.dataValues})
-                    io.to(`${garageId}`).emit("vehicle",{data:vehicle.dataValues})
+                    io.to(`${garageId}`).emit("vehicleRoom",{data:vehicle.dataValues})
 
                    return Response.success(res,200,{
                         message:"vehicle exit successfully",
@@ -63,13 +64,18 @@ export default class vehicleControllers{
                     });
 
                     // io.sockets.emit("vehicle",{data:vehicle.dataValues})
-                    // io.sockets.emit("garage",{data:garage.dataValues})
+                    io.sockets.emit("garage",{data:garage.dataValues})
+
+
+
+                    // SocketRooms.room(`${garageId}`);
+                    // // io.to(`${garageId}`).emit("GarageRoom",{garage:garage.dataValues})
+                    // io.to(`${garageId}`).emit("vehicleRoom",{data:vehicle.dataValues})
 
                     SocketRooms.room(`${garageId}`);
-                    // io.to(`${garageId}`).emit("GarageRoom",{garage:garage.dataValues})
-                    io.to(`${garageId}`).emit("vehicleRoom",{data:vehicle.dataValues})
+                    io.to(`${garageId}`).emit("garageRoom",{data:garage.dataValues});
+                    io.to(`${garageId}`).emit("vehicleRoom",{data:vehicle.dataValues});
 
-                    console.log("--------ss---::",vehicle.dataValues)
                     return Response.success(res,201,{
                         message:"Vehicle saved successfuly",
                         data:vehicle
@@ -99,8 +105,12 @@ export default class vehicleControllers{
                     // await vehicle.save();
 
                     //socket
-                    io.sockets.emit("vehicle",{data:resp.toJSON()})
+                    // io.sockets.emit("vehicle",{data:resp.toJSON()})
                     io.sockets.emit("garage",{data:garage?.dataValues})
+
+                    SocketRooms.room(`${garageId}`);
+                    io.to(`${garageId}`).emit("garageRoom",{data:garage.dataValues});
+                    io.to(`${garageId}`).emit("vehicleRoom",{data:resp.toJSON()});
                     
                     return Response.success(res,201,{
                         message:"Vehicle saved successfuly",
