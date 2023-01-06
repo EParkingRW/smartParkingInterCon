@@ -88,20 +88,20 @@ const garage = {
               JWT: [],
             },
           ],
-          summary: 'Get one garage',
-        parameters: [
-            {
-              in: 'path',
-              name: 'id',
-              required: true,
-              schema: {
+        summary: 'Get one garage',
+          parameters: [
+              {
+                in: 'path',
+                name: 'id',
+                required: true,
+                schema: {
+                },
               },
-            },
-        ], 
-       consumes: ['application/json'],
+          ], 
+        consumes: ['application/json'],
         responses,
-        },
-        put: {
+      },
+      put: {
           tags: ['Garage'],
           security: [
             {
@@ -109,27 +109,57 @@ const garage = {
             },
           ],
           summary: 'update garage',
-     parameters: [
-        {
-          in: 'path',
-          name: 'id',
-          required: true,
-          schema: {
-          },
-        },
-        {
-          in: 'body',
-          name: 'company',
-          schema: {
-            example: {
-              name: 'Emmaneul NKUBITO',
-              garageId:'',
-              ownerId: '',
+          parameters: [
+            {
+              in: 'path',
+              name: 'id',
+              required: true,
+              schema: {
+              },
             },
-          },
-        },
-     
-      ],          consumes: ['application/json'],
+            {
+              in: 'formData',
+              name: 'name',
+            },
+            {
+              in: 'formData',
+              name: 'address',
+            },
+            {
+              in: 'formData',
+              name: 'latitude',
+            },
+            {
+              in: 'formData',
+              name: 'longitude',
+            },
+            {
+              name: 'image',
+              in: 'formData',
+              type: 'file',
+            },
+            {
+              in: 'formData',
+              name: 'hourlyFee',
+            },
+            {
+              in: 'formData',
+              name: 'openingTime',
+            },
+            {
+              in: 'formData',
+              name: 'closingTime',
+            },
+            {
+              in: 'formData',
+              name: 'description',
+            },
+            {
+              in: 'formData',
+              name: 'slots',
+            },
+            ],
+          consumes: ['application/json'],
           responses,
         },
         delete: {
@@ -150,8 +180,8 @@ const garage = {
               },
           ],          
           consumes: ['application/json'],
-              responses,
-            },
-          },
+          responses,
+        },
+    },
 }
 export default garage

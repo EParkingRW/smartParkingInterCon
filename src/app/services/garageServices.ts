@@ -1,6 +1,6 @@
 import DB from '../database';
 
-const { Garages } = DB;
+const { Garages, Users } = DB;
 
 export default class GaragesService {
   static create(data: any) {
@@ -11,16 +11,35 @@ export default class GaragesService {
     return Garages.findAll();
   }
 
-  static findByPk(id: string) {
-    return Garages.findByPk(id);
+  static findByPk(id: any) {
+    return Garages.findByPk(id,{
+      include: {
+        model: Users,
+        attributes:['fullName','userName','email'],
+        as:'user'
+      },
+    });
   }
 
   static findOne(condition:any) {
-    return Garages.findOne({where:{ ...condition }});
+    return Garages.findOne({
+      where:{ ...condition,
+      include: {
+        model: Users,
+        attributes:['fullName','userName','email'],
+        as:'user'
+      },
+    }});
   }
 
   static findAllAndCount() {
-    return Garages.findAndCountAll();
+    return Garages.findAndCountAll({
+      include: {
+        model: Users,
+        attributes:['fullName','userName','email'],
+        as:'user'
+      },
+    });
   }
 
   static update(set: object, conditon: any) {

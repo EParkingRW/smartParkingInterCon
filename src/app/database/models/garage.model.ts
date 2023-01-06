@@ -11,6 +11,7 @@ const GarageModel = (sequelize: Sequelize) => {
         defaultValue: DataTypes.UUIDV4 
       },
       name: DataTypes.STRING,
+      slug: DataTypes.STRING,
       address: DataTypes.STRING,
       latitude: DataTypes.DOUBLE,
       longitude: DataTypes.DOUBLE,

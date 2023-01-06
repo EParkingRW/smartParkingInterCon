@@ -4,7 +4,7 @@ const company = {
   '/companies': {
     post: {
       tags: ['Company'],
-      security: [],
+      security: [{JWT: [],},],
       summary: 'Create company',
       parameters: [
         {
@@ -33,7 +33,7 @@ const company = {
   '/companies/{id}': {
     get: {
       tags: ['Company'],
-      security: [],
+      security: [{JWT: [],},],
       summary: 'Get one company',
       parameters: [
         {
@@ -49,7 +49,7 @@ const company = {
     },
     put: {
       tags: ['Company'],
-      security: [],
+      security: [{JWT: [],},],
       summary: 'Edit company profile',
       parameters: [
         {
@@ -75,7 +75,7 @@ const company = {
     },
     delete: {
       tags: ['Company'],
-      security: [],
+      security: [{JWT: [],},],
       summary: 'Delete company',
       parameters: [
         {

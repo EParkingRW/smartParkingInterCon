@@ -4,7 +4,7 @@ import GaragesService from "../../services/garageServices";
 import { io } from "../../..";
 import cloudinari from "../../system/fileUploader/cloudinary";
 
-const {Vehicles} = DB
+const {Vehicles, Garages } = DB
 export default class vehicleControllers{
     static async savePlateText(req,res){
         try {
@@ -21,15 +21,21 @@ export default class vehicleControllers{
                     plateText, garageId
                 }
             })
-            if(vehicle){
+            if(vehicle){//if car was inside or is returning to park again
                 imageUrl = vehicle?.imageUrl;
-                if(vehicle.isInside === true){
+                if(vehicle.isInside === true){ // check if it is inside
 
                     vehicle.set('isInside',!vehicle?.isInside); 
                     await vehicle.save();
 
                     garage.set('takenSlots',garage?.takenSlots-1); 
-                    await garage.save();
+                    await garage.save({
+                        include:[ {
+                            model: Garages,
+                            attributes:['name','slots','takenSlots'],
+                            as:'garage'
+                          }]
+                    });
 
                     //socket
                     io.sockets.emit("vehicle",{data:vehicle.dataValues})
@@ -40,12 +46,18 @@ export default class vehicleControllers{
                         data:vehicle
                    })
                 } 
-                else{
+                else{ //car was in this parking before and is returning
                     garage.set('takenSlots',garage?.takenSlots+1); 
                     garage = await garage.save();
 
                     vehicle.set('isInside',!vehicle?.isInside); 
-                    await vehicle.save();
+                    await vehicle.save({
+                        include:[ {
+                            model: Garages,
+                            attributes:['name','slots','takenSlots'],
+                            as:'garage'
+                          }]
+                    });
 
                     io.sockets.emit("vehicle",{data:vehicle.dataValues})
                     io.sockets.emit("garage",{data:garage.dataValues})
@@ -56,7 +68,7 @@ export default class vehicleControllers{
                     })
                 }
             }
-            else{
+            else{ // here is when car is new in this parking
                 try {
                     imageUrl = await cloudinari.uploadPhoto(req, res, req.files.photo);
                   } catch (error) {
@@ -65,7 +77,13 @@ export default class vehicleControllers{
                       error,
                     });
                   }
-                Vehicles.create({plateText,garageId,imageUrl}).then(async(resp)=>{
+                Vehicles.create({plateText,garageId,imageUrl},{
+                    include:[ {
+                        model: Garages,
+                        attributes:['name','slots','takenSlots'],
+                        as:'garage'
+                      }]
+                }).then(async(resp)=>{
                     garage.set('takenSlots',garage?.takenSlots+1); 
                     garage = await garage.save();
                     
@@ -93,7 +111,13 @@ export default class vehicleControllers{
 
     static async getAllSaveVehicles(req,res){
         try {
-            await Vehicles.findAndCountAll().then((resp)=>{
+            await Vehicles.findAndCountAll({
+                include:[ {
+                    model: Garages,
+                    attributes:['name','slots','takenSlots'],
+                    as:'garage'
+                  }]
+            }).then((resp)=>{
                 return Response.success(res,201,{
                     message:"Vehicles retreived successfuly",
                     data:resp
