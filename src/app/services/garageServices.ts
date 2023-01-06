@@ -23,13 +23,13 @@ export default class GaragesService {
 
   static findOne(condition:any) {
     return Garages.findOne({
-      where:{ ...condition,
+      where:{ ...condition},
       include: {
         model: Users,
         attributes:['fullName','userName','email'],
         as:'user'
       },
-    }});
+    });
   }
 
   static findAllAndCount() {
