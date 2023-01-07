@@ -8,7 +8,7 @@ import routes from './app/restful/routers';
 import DB from './app/database';
 import { associate } from './app/database/relationships';
 import { isAuth } from './app/restful/middlewares/auth'
-const {Server} = require('socket.io')
+import { Server } from 'socket.io';
 
 dotenv.config();
 //const __dirname = path.resolve();
