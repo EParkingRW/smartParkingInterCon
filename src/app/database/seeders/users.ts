@@ -16,7 +16,7 @@ module.exports = {
             status: 1,
             active: true,
             createdAt:new Date(),
-            updatedAt: new Date(),
+            updatedAt: new Date()
         },
         {
           id:'13203aaa-47c3-4db2-b88f-e5cd3137310b',
@@ -32,7 +32,7 @@ module.exports = {
           status: 1,
           active: true,
           createdAt:new Date(),
-          updatedAt: new Date(),
+          updatedAt: new Date()
       },
     
     ]
