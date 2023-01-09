@@ -1,6 +1,6 @@
 import responses from '../responses';
 
-const users = {
+const auth = {
   '/auth': {
     post: {
       tags: ['Users'],
@@ -141,4 +141,4 @@ const users = {
   },
 };
 
-export default users;
+export default auth;

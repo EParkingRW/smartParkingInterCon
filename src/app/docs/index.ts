@@ -1,9 +1,10 @@
 import dotenv from 'dotenv';
 import swaggerDoc from './swagger.json';
-import auth from './users/auth';
+import auth from './auth/auth';
 import garage from './garage';
 import company from './company/company';
 import Vehicles from './vehicles';
+import user from './user';
 
 
 const defaults = swaggerDoc.paths;
@@ -18,6 +19,7 @@ const host =
 const paths = {
   ...defaults,
   ...auth,
+  ...user,
   ...company,
   ...garage,
   ...Vehicles,
