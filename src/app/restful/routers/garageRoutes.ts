@@ -15,6 +15,12 @@ router.get(
     GarageControllers.getAll);
 
 router.get(
+      '/user',
+      protectedRoute,
+      GarageControllers.getOfUser,
+    );
+
+router.get(
     '/:id', 
     GarageControllers.getOne);
 

@@ -18,7 +18,7 @@ const public_id = `projects/smartparking/${uuids}_${Date.now()/1000}`
             public_id,
             overwrite:true,
             invalidate:true,
-            //resource_type:"auto",
+            timeout: 100000,
             tags: 'basic_sample'
           }
           return new Promise((resolve,reject)=>{

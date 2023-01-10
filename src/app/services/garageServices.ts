@@ -42,6 +42,16 @@ export default class GaragesService {
     });
   }
 
+  static findAllAndCountByCondition(condition:any) {
+    return Garages.findAndCountAll({
+      where:{ ...condition},
+      include: {
+        model: Users,
+        attributes:['fullName','userName','email'],
+        as:'user'
+      },
+    });
+  }
   static update(set: object, conditon: any) {
     return Garages.update(set, {
       where: conditon,
