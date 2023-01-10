@@ -80,7 +80,8 @@ export default class GarageControllers{
             await GaragesService.findAllAndCount().then((resp)=>{
                 if(!resp?.count){
                     return Response.error(res,203,{
-                        message:"there is not garage in the system",
+                        message:"there is no garage in the system",
+                        data:resp
                     })
                 }
                 io.sockets.emit("garages",{data:resp})
@@ -163,6 +164,36 @@ export default class GarageControllers{
                 message:"server error",
                 error:error.message
             })
+        }
+    }
+
+    static async getOfUser(req,res){
+        try {
+            console.log("-----user-----", req.userId)
+            const { userId } = req; 
+            await GaragesService.findAllAndCountByCondition({userId}).then((resp)=>{
+                if(!resp?.count){
+                    return Response.error(res,203,{
+                        message:"there is no garage in the system",
+                        data:resp
+                    })
+                }
+                io.sockets.emit("garages",{data:resp})
+                return Response.success(res,200,{
+                    message:"garages retreived successfully",
+                    data:resp
+                })
+            }).catch((error)=>{
+                return Response.error(res,401,{
+                    message:"there is problem in retreiving garages",
+                    error:error.message
+                })
+            })
+        } catch (error) {
+            return Response.error(res,500,{
+                message:"server error",
+                error:error.message
+            })   
         }
     }
 

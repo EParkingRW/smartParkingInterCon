@@ -79,8 +79,8 @@ const garage = {
           consumes: ['application/json'],
           responses,
         },
-      },
-      '/garages/{id}': {
+    },
+    '/garages/{id}': {
         get: {
           tags: ['Garage'],
           security: [
@@ -182,6 +182,20 @@ const garage = {
           consumes: ['application/json'],
           responses,
         },
+    },
+    '/garages/user': {
+      get: {
+        tags: ['Garage'],
+        security: [
+          {
+            JWT: [],
+          },
+        ],
+        summary: 'retreive all garages of logged in user',
+        parameters: [ ],
+        consumes: ['application/json'],
+        responses,
+      },
     },
 }
 export default garage

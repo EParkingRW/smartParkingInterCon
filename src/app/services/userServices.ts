@@ -15,8 +15,8 @@ export default class UserService {
     return User.findByPk(id);
   }
 
-  static findAllAndCount(condition: any) {
-    return User.findAndCountAll({ where: { condition } });
+  static findAllAndCount() {
+    return User.findAndCountAll();
   }
 
   static findByEmail(email: string) {
