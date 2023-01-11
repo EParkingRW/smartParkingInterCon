@@ -4,6 +4,7 @@ import GaragesService from "../../services/garageServices";
 import { io } from "../../..";
 import cloudinari from "../../system/fileUploader/cloudinary";
 import SocketRooms from "../../system/sockets/rooms";
+import VehicleService from "../../services/vehicleServices";
 
 const {Vehicles, Garages } = DB
 export default class vehicleControllers{
@@ -175,6 +176,35 @@ export default class vehicleControllers{
                 message:"server error",
                 error:error.message
             })
+        }
+    }
+
+    static async getVehiclesByDateRange(req,res){
+        const toTimeStamp = (strDate) => { 
+            const dt = Date.parse(strDate); 
+            return dt; 
+           }
+        try {
+            const { userId } = req;
+            const { startingDate, endingDate} = req.body;
+            const garage:any = await GaragesService.findOne({userId});
+            if(!garage){
+                return Response.error(res,404,{
+                    mesage:"you don't have any garage of your own",
+                    data:[]
+                })
+            }
+            const garageId = garage.id;
+            await VehicleService.findvehiclesByDateRange({garageId,startingDate:toTimeStamp(startingDate),endingDate:toTimeStamp(endingDate)}).then((resp)=>{
+                return Response.success(res,201,{
+                    message:"Vehicles retreived successfuly",
+                    data:resp
+                })
+            }).catch((error)=>{
+                return Response.error(res,403,{message:"Failed to retreive vehicles",erraor:error.message})
+            })
+        } catch (error) {
+            return Response.error(res,500,{message:"server error",error:error.message})
         }
     }
 }
