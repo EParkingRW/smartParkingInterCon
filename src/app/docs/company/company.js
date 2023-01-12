@@ -90,6 +90,24 @@ const company = {
       responses,
     },
   },
+  '/sockets/{id}': {
+    get: {
+      tags: ['Sockets'],
+      security: [{JWT: [],},],
+      summary: 'Leave Room',
+      parameters: [
+        {
+          in: 'path',
+          name: 'id',
+          required: true,
+          schema: {
+          },
+        },
+      ],
+      consumes: ['application/json'],
+      responses,
+    },
+  },
 };
 
 export default company;

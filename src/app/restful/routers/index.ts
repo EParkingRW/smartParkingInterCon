@@ -5,7 +5,8 @@ import UserRoutes from './authRouter';
 import GarageRoutes from './garageRoutes';
 import CompanyRoutes from './companyRoutes';
 import VehicleRoutes from './vehicleRoutes';
-import userRouter from './userRouter';
+import UserRouter from './userRouter';
+import SocketRouter from './socketRouter';
 
 const API_VERSION = process.env.API_VERSION || 'v1';
 const url = `/api/${API_VERSION}`;
@@ -22,7 +23,8 @@ router.use(`${url}/auth`, UserRoutes);
 router.use(`${url}/garages`, GarageRoutes);
 router.use(`${url}/companies`, CompanyRoutes);
 router.use(`${url}/vehicles`, VehicleRoutes);
-router.use(`${url}/users`, userRouter);
+router.use(`${url}/users`,UserRouter);
+router.use(`${url}/sockets`,SocketRouter);
 
 router.use(`${url}/`, (req, res) => {
   res.send({status:200,message:'Default API endpoint'});

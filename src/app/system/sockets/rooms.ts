@@ -13,5 +13,12 @@ export default class SocketRooms{
             });
           });
     }
+
+    static async leave(room: any){
+      io.on('connection', (socket) => {     
+        // leave room
+        socket.leave(room);
+      });
+    }
 }
 
