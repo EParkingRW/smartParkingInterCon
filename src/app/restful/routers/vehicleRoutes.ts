@@ -16,8 +16,13 @@ router.get(
 
 router.delete(
     '/:id',
-    // protectedRoute, 
+    protectedRoute, 
     vehicleControllers.delete
     );
+router.post(
+    '/range',
+    protectedRoute,
+    vehicleControllers.getVehiclesByDateRange)
+
 
 export default router;
