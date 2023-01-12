@@ -207,4 +207,25 @@ export default class vehicleControllers{
             return Response.error(res,500,{message:"server error",error:error.message})
         }
     }
+
+    static async leavingSocketRoom(req,res){
+        try {
+            const { id } = req.params;
+            SocketRooms.leave(id).then(()=>{
+                return Response.success(res,200,{
+                    message:"You leave room successfully",
+                })
+            }).catch((error)=>{
+                return Response.error(res,401,{
+                    message:"Fail to let you leave the room",
+                    error:error.message
+                })
+            })
+        } catch (error) {
+            return Response.error(res,500,{
+                message:"server error",
+                error:error.message
+            })           
+        }
+    }
 }
