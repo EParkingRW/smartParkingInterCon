@@ -21,6 +21,12 @@ router.get(
     );
 
 router.get(
+  '/user/:id',
+  protectedRoute,
+  GarageControllers.getParkingOfUser,
+);
+
+router.get(
     '/:id', 
     GarageControllers.getOne);
 

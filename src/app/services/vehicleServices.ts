@@ -85,6 +85,15 @@ export default class VehicleService{
     where: { plateText:condition },
     order: [ [ 'createdAt', 'DESC' ]]});
 }
-
+/**
+   * Find Vehicle by given condition
+   * @param {Object} condition Condition to follow ex: { where: {email: 'john@example.com' }}
+   * @returns Vehicle that matches the condition
+   */
+static findByCondition(condition) {
+  return Vehicles.findAndCountAll({
+    where: { ...condition },
+    order: [ [ 'createdAt', 'DESC' ]]});
+}
 
 }

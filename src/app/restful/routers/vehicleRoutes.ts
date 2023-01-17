@@ -24,5 +24,15 @@ router.post(
     protectedRoute,
     vehicleControllers.getVehiclesByDateRange)
 
+router.get(
+    '/parkings/:id',
+    protectedRoute,
+    vehicleControllers.vehiclesOfInParking)
+
+router.get(
+    '/inside/:id',
+    protectedRoute,
+    vehicleControllers.getVehicleInsideParking)
+
 
 export default router;
