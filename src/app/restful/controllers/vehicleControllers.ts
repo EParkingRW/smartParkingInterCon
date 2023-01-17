@@ -15,7 +15,7 @@ export default class vehicleControllers{
             let garage:any = await GaragesService.findByPk(`${garageId}`);
             if (!garage) {
                 return Response.error(res, 404, {
-                    message: 'garage not found',
+                    message: 'parking not found',
                 });
             }
             const vehicle:any = await Vehicles.findOne({

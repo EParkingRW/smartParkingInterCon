@@ -7,7 +7,7 @@ export default class AuthValidator {
           fullName: Joi.string().required(),
           userName: Joi.string().required(),
           email: Joi.string().required().email(),
-          phoneNumber: Joi.string().required(),
+          phoneNumber: Joi.string(),
           gender: Joi.string(),
           dateOfBirth: Joi.date(),
           company : Joi.string(),

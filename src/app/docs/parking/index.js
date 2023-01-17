@@ -1,16 +1,16 @@
 import responses from '../responses';
 import 'dotenv/config';
 
-const garage = {
+const parking = {
     '/garages': {
         post: {
-          tags: ['Garage'],
+          tags: ['Parkings'],
           security: [
             {
               JWT: [],
             },
           ],
-          summary: 'create new garage',
+          summary: 'create new parking',
           parameters: [
             {
                 in: 'formData',
@@ -68,13 +68,13 @@ const garage = {
           responses,
         },
         get: {
-          tags: ['Garage'],
+          tags: ['Parkings'],
           security: [
             {
               JWT: [],
             },
           ],
-          summary: 'retreive all garages',
+          summary: 'retreive all parkings',
           parameters: [ ],
           consumes: ['application/json'],
           responses,
@@ -82,13 +82,13 @@ const garage = {
     },
     '/garages/{id}': {
         get: {
-          tags: ['Garage'],
+          tags: ['Parkings'],
           security: [
             {
               JWT: [],
             },
           ],
-        summary: 'Get one garage',
+        summary: 'Get one parking',
           parameters: [
               {
                 in: 'path',
@@ -102,13 +102,13 @@ const garage = {
         responses,
       },
       put: {
-          tags: ['Garage'],
+          tags: ['Parkings'],
           security: [
             {
               JWT: [],
             },
           ],
-          summary: 'update garage',
+          summary: 'update parking',
           parameters: [
             {
               in: 'path',
@@ -163,13 +163,13 @@ const garage = {
           responses,
         },
         delete: {
-          tags: ['Garage'],
+          tags: ['Parkings'],
           security: [
             {
               JWT: [],
             },
           ],
-          summary: 'delete garage',
+          summary: 'delete parking',
           parameters: [
               {
                 in: 'path',
@@ -185,17 +185,17 @@ const garage = {
     },
     '/garages/user': {
       get: {
-        tags: ['Garage'],
+        tags: ['Parkings'],
         security: [
           {
             JWT: [],
           },
         ],
-        summary: 'retreive all garages of logged in user',
+        summary: 'retreive all parkings registered to logged in user',
         parameters: [ ],
         consumes: ['application/json'],
         responses,
       },
     },
 }
-export default garage
+export default parking

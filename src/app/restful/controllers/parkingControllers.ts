@@ -5,7 +5,7 @@ import convertToSlug from "../../system/helpers/convertToSlug";
 import { io } from "../../..";
 
 
-export default class GarageControllers{
+export default class ParkingControllers{
 
     static async create(req, res) {
         try {
@@ -18,7 +18,7 @@ export default class GarageControllers{
           let garage = await GaragesService.findOne({ slug });
           if (garage) {
             return res.status(400).json({
-              message: 'garage is already exist',
+              message: 'parking is already exist',
             });
           }
       
@@ -37,7 +37,7 @@ export default class GarageControllers{
             const garages = await GaragesService.findAllAndCount();
             io.sockets.emit('garages', { data: garages });
             return res.status(201).json({
-              message: 'Garage created successfully',
+              message: 'Parking created successfully',
               data: resp,
             });
           } catch (error) {
@@ -59,12 +59,12 @@ export default class GarageControllers{
             let garage:any = await GaragesService.findByPk(`${req.params.id}`);
             if (!garage) {
                 return Response.error(res, 404, {
-                    message: 'garage not found',
+                    message: 'parking not found',
                 });
             }
             io.sockets.emit("garage",{data:garage?.dataValues})
             return Response.success(res,200,{
-                message:"Garage retreived successfully",
+                message:"Parking retreived successfully",
                 data:garage
             })
         } catch (error) {
@@ -80,18 +80,18 @@ export default class GarageControllers{
             await GaragesService.findAllAndCount().then((resp)=>{
                 if(!resp?.count){
                     return Response.error(res,203,{
-                        message:"there is no garage in the system",
+                        message:"there is no parking in the system",
                         data:resp
                     })
                 }
                 io.sockets.emit("garages",{data:resp})
                 return Response.success(res,200,{
-                    message:"garages retreived successfully",
+                    message:"parkings retreived successfully",
                     data:resp
                 })
             }).catch((error)=>{
                 return Response.error(res,401,{
-                    message:"there is problem in retreiving garages",
+                    message:"there is problem in retreiving parkings",
                     error:error.message
                 })
             })
@@ -109,7 +109,7 @@ export default class GarageControllers{
             let garageExist:any = await GaragesService.findByPk(`${id}`);
             if (!garageExist) {
                 return Response.error(res, 404, {
-                    message: 'garage not found',
+                    message: 'parking not found',
                 });
             }
             const imageUrl = req.files
@@ -126,7 +126,7 @@ export default class GarageControllers{
             garageExist.set(req.body);
             garageExist.save();
             return Response.success(res,200,{
-                message:"garage updated successfully",
+                message:"parking updated successfully",
                 data:garageExist
             })
             
@@ -143,18 +143,18 @@ export default class GarageControllers{
             let garage = await GaragesService.findByPk(`${req.params.id}`);
             if (!garage) {
                 return Response.error(res, 404, {
-                    message: 'garage not found',
+                    message: 'parking not found',
                 });
             }
             await GaragesService.destroy({
                     id:`${req.params.id}`
             }).then((resp)=>{
                 return Response.success(res,200,{
-                    message:"garage deleted successfully",
+                    message:"parking deleted successfully",
                 })
             }).catch((error)=>{
                 return Response.error(res,401,{
-                    message:"there is problem in deleting garage",
+                    message:"there is problem in deleting parking",
                     error:error.message
                 })
             })
@@ -169,23 +169,22 @@ export default class GarageControllers{
 
     static async getOfUser(req,res){
         try {
-            console.log("-----user-----", req.userId)
             const { userId } = req; 
             await GaragesService.findAllAndCountByCondition({userId}).then((resp)=>{
                 if(!resp?.count){
                     return Response.error(res,203,{
-                        message:"there is no garage in the system",
+                        message:"there is no parking in the system",
                         data:resp
                     })
                 }
                 io.sockets.emit("garages",{data:resp})
                 return Response.success(res,200,{
-                    message:"garages retreived successfully",
+                    message:"parkings retreived successfully",
                     data:resp
                 })
             }).catch((error)=>{
                 return Response.error(res,401,{
-                    message:"there is problem in retreiving garages",
+                    message:"there is problem in retreiving parkings",
                     error:error.message
                 })
             })
