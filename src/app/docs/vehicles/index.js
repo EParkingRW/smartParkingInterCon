@@ -90,5 +90,45 @@ const Vehicles = {
         responses,
       },
     },
+    '/vehicles/parkings/{id}': {
+      get: {
+        tags: ['Vehicles'],
+        security: [ {JWT: [],},
+        ],
+        summary: 'retreive all vehicles in certain parking',
+        parameters: [
+          {
+            in: 'path',
+            name: 'id',
+            required: true,
+            schema: {
+              example: 'e14f60da-ded6-41e1-9984-7d3713bf1ff5',
+            },
+          },
+        ],
+        consumes: ['application/json'],
+        responses,
+      },
+    },
+    '/vehicles/inside/{id}': {
+      get: {
+        tags: ['Vehicles'],
+        security: [ {JWT: [],},
+        ],
+        summary: 'retreive all vehicles in inside parking',
+        parameters: [
+          {
+            in: 'path',
+            name: 'id',
+            required: true,
+            schema: {
+              example: 'e14f60da-ded6-41e1-9984-7d3713bf1ff5',
+            },
+          },
+        ],
+        consumes: ['application/json'],
+        responses,
+      },
+    },
 }
 export default Vehicles

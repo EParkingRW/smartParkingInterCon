@@ -228,4 +228,61 @@ export default class vehicleControllers{
             })           
         }
     }
+
+    static async vehiclesOfInParking(req,res){
+        try {
+            const { id } = req.params;
+            const parking = await GaragesService.findByPk(id);
+            if(!parking){
+                return Response.error(res,404,{
+                    message:"This parking does not exist"
+                })
+            }
+            VehicleService.findByCondition({garageId:id}).then(({rows,count})=>{
+                return Response.success(res,200,{
+                    message:"vehicles received successfully",
+                    data:{rows,count}
+                })
+            }).catch((error)=>{
+                return Response.error(res,401,{
+                    message:"Fail to retreive vehicle",
+                    error:error.message
+                })
+            })
+        } catch (error) {
+            return Response.error(res,500,{
+                message:"server error",
+                error:error.message
+            })
+        }
+    }
+
+    static async getVehicleInsideParking(req,res){
+        try {
+            const { id } = req.params;
+            const parking = await GaragesService.findByPk(id);
+            if(!parking){
+                return Response.error(res,404,{
+                    message:"This parking does not exist"
+                })
+            }
+            VehicleService.findByCondition({garageId:id,isInside:true}).then(({rows,count})=>{
+                return Response.success(res,200,{
+                    message:"vehicles received successfully",
+                    data:{rows,count}
+                })
+            }).catch((error)=>{
+                return Response.error(res,401,{
+                    message:"Fail to retreive vehicle",
+                    error:error.message
+                })
+            })
+        } catch (error) {
+            return Response.error(res,500,{
+                message:"server error",
+                error:error.message
+            })
+        }
+    }
+
 }

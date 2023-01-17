@@ -3,6 +3,7 @@ import cloudinari from "../../system/fileUploader/cloudinary";
 import GaragesService from "../../services/garageServices";
 import convertToSlug from "../../system/helpers/convertToSlug";
 import { io } from "../../..";
+import UserService from "../../services/userServices";
 
 
 export default class ParkingControllers{
@@ -171,6 +172,41 @@ export default class ParkingControllers{
         try {
             const { userId } = req; 
             await GaragesService.findAllAndCountByCondition({userId}).then((resp)=>{
+                if(!resp?.count){
+                    return Response.error(res,203,{
+                        message:"there is no parking in the system",
+                        data:resp
+                    })
+                }
+                io.sockets.emit("garages",{data:resp})
+                return Response.success(res,200,{
+                    message:"parkings retreived successfully",
+                    data:resp
+                })
+            }).catch((error)=>{
+                return Response.error(res,401,{
+                    message:"there is problem in retreiving parkings",
+                    error:error.message
+                })
+            })
+        } catch (error) {
+            return Response.error(res,500,{
+                message:"server error",
+                error:error.message
+            })   
+        }
+    }
+
+    static async getParkingOfUser(req,res){
+        try {
+            const { id } = req.params; 
+            const user = await UserService.findByPk(id);
+            if(!user){
+                return Response.error(res,404,{
+                    message:"this user does not exist"
+                })
+            }
+            await GaragesService.findAllAndCountByCondition({userId:id}).then((resp)=>{
                 if(!resp?.count){
                     return Response.error(res,203,{
                         message:"there is no parking in the system",

@@ -197,5 +197,27 @@ const parking = {
         responses,
       },
     },
+    '/garages/user/{id}': {
+      get: {
+        tags: ['Parkings'],
+        security: [
+          {
+            JWT: [],
+          },
+        ],
+        summary: 'retreive all parkings registered to this user',
+        parameters: [
+          {
+            in: 'path',
+            name: 'id',
+            required: true,
+            schema: {
+            },
+          },
+        ],
+        consumes: ['application/json'],
+        responses,
+      },
+    },
 }
 export default parking
