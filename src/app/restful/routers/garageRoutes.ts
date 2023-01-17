@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import GarageControllers from '../controllers/garageControllers';
+import GarageControllers from '../controllers/parkingControllers';
 import { protectedRoute } from '../middlewares/auth';
 
 const router = Router();

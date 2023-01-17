@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 import swaggerDoc from './swagger.json';
 import auth from './auth/auth';
-import garage from './garage';
+import parking from './parking';
 import company from './company/company';
 import Vehicles from './vehicles';
 import user from './user';
@@ -21,7 +21,7 @@ const paths = {
   ...auth,
   ...user,
   ...company,
-  ...garage,
+  ...parking,
   ...Vehicles,
 };
 
