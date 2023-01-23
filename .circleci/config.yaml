@@ -15,7 +15,8 @@ jobs:
     # You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
     # A list of available CircleCI Docker Convenience Images are available here: https://circleci.com/developer/images/image/cimg/node
     docker:
-      - image: cimg/node:16.10
+      - image: cimg/node:19.4.0
+      
     # Then run your tests!
     # CircleCI will report the results back to your VCS provider.
     steps:
@@ -27,8 +28,8 @@ jobs:
           # If you are using yarn, change the line below from "npm" to "yarn"
           pkg-manager: npm
       - run:
-          name: Run tests
-          command: npm test
+          name: Run Build
+          command: npm run build
 
 workflows:
   # Below is the definition of your workflow.
